@@ -1,9 +1,11 @@
 var express = require("express");
 var app = express();
-var PORT = process.env.PORT || 8080; // default port 8080
+var PORT = process.env.PORT || 8080;
 var cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
-var cookieSession = require('cookie-session')
+var cookieSession = require('cookie-session');
+var methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -86,7 +88,7 @@ app.post("/urls", (req, res) => {
   res.redirect('/urls');
 });
 
-app.post("/urls/:id/delete", (req, res) => {
+app.delete("/urls/:id", (req, res) => {
   let item = req.params.id;
   delete urlDatabase[item];
   res.redirect('/urls');
@@ -105,7 +107,7 @@ app.get("/urls/:id", (req, res) => {
   }
 });
 
-app.post("/urls/:id", (req, res) => {
+app.put("/urls/:id", (req, res) => {
   let id = req.params.id;
   urlDatabase[id]['url'] = req.body.longURL;
   res.redirect('/urls');

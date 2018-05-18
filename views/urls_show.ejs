@@ -8,7 +8,7 @@
 <body>
   <ul>
     <li>ShortURL: <%=shortURL %></li>
-    <form method='POST' action='/urls/<%= shortURL%>'>
+    <form method='POST' action='/urls/<%= shortURL%>?_method=PUT'>
       <input type='text' name='longURL' value=<%=urls[shortURL].url %>/>
       <button type='submit'>Update</button>
     </form>

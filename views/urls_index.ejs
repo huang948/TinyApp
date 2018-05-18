@@ -13,7 +13,7 @@
     <% for (var keys in urls) { %>
       <li><%= keys %> => <%= urls[keys]["url"] %></li>
       <a href="/urls/<%= keys %>">Edit</a>
-      <form method='POST' action="/urls/<%=keys%>/delete">
+      <form method='POST' action="/urls/<%=keys%>?_method=delete">
         <button type='submit'>Delete</button>
       <hr/>
       </form>
