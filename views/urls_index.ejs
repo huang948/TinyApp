@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<%- include ./partials/_header.ejs %>
+<body>
+  <% if (!user) { %>
+    <p><b>Please Login to before proceeding</b></p>
+  <% } else { %>
+    <br/>
+    <hr/>
+    <% for (var keys in urls) { %>
+      <li><%= keys %> => <%= urls[keys]["url"] %></li>
+      <a href="/urls/<%= keys %>">Edit</a>
+      <form method='POST' action="/urls/<%=keys%>/delete">
+        <button type='submit'>Delete</button>
+      <hr/>
+      </form>
+    <% } %>
+    <br/>
+    <a href='/urls/new'>Create a New Short Link</a>
+  <% } %>
+</body>
+</html>
