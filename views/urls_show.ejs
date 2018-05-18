@@ -9,6 +9,9 @@
   <ul>
     <li>ShortURL: <%=shortURL %></li>
     <form method='POST' action='/urls/<%= shortURL%>?_method=PUT'>
+      <p>Number of Visitations: <%=urls[shortURL]["visit"] %></p>
+      <p>Number of Unique Visitations: <%= urls[shortURL]["unique_visit"].size %></p>
+      <p>List of Visits: <br/> <%=urls[shortURL]["timeofvisit"]%></p>
       <input type='text' name='longURL' value=<%=urls[shortURL].url %>/>
       <button type='submit'>Update</button>
     </form>

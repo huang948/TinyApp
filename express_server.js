@@ -19,8 +19,14 @@ app.use(cookieSession({
 app.set("view engine", "ejs")
 
 var urlDatabase = {
-  "b2xVn2": {userID: "test", datecreated: "TODAY", url: "http://www.lighthouselabs.ca"},
-  "9sm5xK": {userID: "test", datecreated: "YESTERDAY", url: "http://www.google.com"}
+  "b2xVn2": {userID: "test", datecreated: "TODAY",
+             url: "http://www.lighthouselabs.ca",
+             visit: 0, unique_visit: new Set(),
+             timeofvisit: []},
+  "9sm5xK": {userID: "test", datecreated: "YESTERDAY",
+             url: "http://www.google.com", visit: 0,
+             unique_visit: new Set(),
+             timeofvisit: []}
 };
 
 const users = {
@@ -84,7 +90,9 @@ app.get("/urls/new", (req, res) => {
 
 app.post("/urls", (req, res) => {
   let temp = generateRandomString();
-  urlDatabase[temp] = {userID: req.session.user_id, datecreated: "TODAY", url: req.body.longURL};
+  urlDatabase[temp] = {userID: req.session.user_id, datecreated: "TODAY", url: req.body.longURL, visit: 0,
+             unique_visit: new Set(),
+             timeofvisit: []};
   res.redirect('/urls');
 });
 
@@ -114,7 +122,15 @@ app.put("/urls/:id", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-   if (req.params.shortURL in urlDatabase) {
+  if (req.params.shortURL in urlDatabase) {
+    if (req.session.user_id) {
+      urlDatabase[req.params.shortURL].timeofvisit.push([req.session.user_id, new Date()]);
+      urlDatabase[req.params.shortURL].unique_visit.add(req.session.user_id);
+    } else {
+      urlDatabase[req.params.shortURL].timeofvisit.push(["Random User", new Date()]);
+      urlDatabase[req.params.shortURL].unique_visit.add(0);
+    }
+    urlDatabase[req.params.shortURL].visit += 1;
     let longURL = urlDatabase[req.params.shortURL]['url'];
     res.redirect(longURL);
   } else {
